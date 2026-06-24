@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" href="/favicon.png">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Yuki games - Download H game</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    user-select: none; -webkit-user-select: none;
+    background: #0a1628;
+    overflow-x: hidden;
+  }
+
+  /* ── ANIMATED BLUE BACKGROUND ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background: linear-gradient(135deg, #0a1628 0%, #0d2b5e 40%, #1a4db5 70%, #0369a1 100%);
+    background-size: 300% 300%;
+    animation: bgPulse 6s ease infinite;
+  }
+  @keyframes bgPulse {
+    0%   { background-position: 0% 0%; }
+    50%  { background-position: 100% 100%; }
+    100% { background-position: 0% 0%; }
+  }
+
+  /* Moving light orbs */
+  body::after {
+    content: '';
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 40% 40% at 20% 20%, rgba(56,189,248,0.18) 0%, transparent 70%),
+      radial-gradient(ellipse 30% 30% at 80% 70%, rgba(99,102,241,0.15) 0%, transparent 70%),
+      radial-gradient(ellipse 25% 25% at 60% 10%, rgba(14,165,233,0.12) 0%, transparent 70%);
+    animation: orbFloat 10s ease-in-out infinite alternate;
+  }
+  @keyframes orbFloat {
+    0%   { transform: translate(0px, 0px); }
+    100% { transform: translate(20px, 30px); }
+  }
+
+  .store { max-width: 480px; margin: 0 auto; background: transparent; min-height: 100vh; padding-bottom: 2rem; position: relative; z-index: 1; }
+
+  /* ── HEADER ── */
+  .header {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    padding: 1rem 1rem 0.75rem;
+    border-radius: 0 0 24px 24px;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.25);
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+  }
+  .brand { display: flex; align-items: center; gap: 10px; justify-content: center; margin-bottom: 0.75rem; }
+  .brand-avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: linear-gradient(135deg, #38bdf8, #3b82f6);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; overflow: hidden; flex-shrink: 0;
+    box-shadow: 0 0 18px rgba(56,189,248,0.5);
+  }
+  .brand-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block; }
+  .brand-name { font-size: 24px; font-weight: 900; letter-spacing: -0.5px; color: white; text-shadow: 0 0 20px rgba(56,189,248,0.6); }
+
+  .search-bar {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50px; padding: 10px 16px;
+    border: 1px solid rgba(255,255,255,0.2);
+    transition: border-color 0.2s;
+  }
+  .search-bar:focus-within { border-color: rgba(56,189,248,0.5); }
+  .search-bar input { border: none; background: transparent; font-size: 14px; color: white; outline: none; flex: 1; }
+  .search-bar input::placeholder { color: rgba(255,255,255,0.45); }
+
+  /* ── TABS ── */
+  .tabs { display: flex; gap: 8px; padding: 0.75rem 1rem; }
+  .tab {
+    padding: 8px 20px; border-radius: 50px; font-size: 13px; font-weight: 600;
+    border: 1.5px solid rgba(56,189,248,0.4);
+    background: rgba(56,189,248,0.12); color: #7dd3fc;
+    cursor: pointer; white-space: nowrap; transition: all 0.15s;
+  }
+  .tab.active { background: #38bdf8; color: #0a1628; border-color: #38bdf8; box-shadow: 0 0 16px rgba(56,189,248,0.45); }
+
+  /* ── SECTION TITLE ── */
+  .section-title { display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 700; color: rgba(255,255,255,0.85); padding: 0.25rem 1rem 0.6rem; }
+
+  /* ── CARDS ── */
+  .cards { display: flex; flex-direction: column; gap: 14px; padding: 0 1rem; }
+  .apk-card {
+    background: rgba(255,255,255,0.95);
+    border-radius: 18px; padding: 1.1rem;
+    border: 1px solid rgba(56,189,248,0.15);
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .apk-card:hover {
+    box-shadow: 0 8px 32px rgba(56,189,248,0.2);
+    transform: translateY(-2px);
+    border-color: rgba(56,189,248,0.35);
+  }
+
+  .apk-top { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .apk-icon { width: 56px; height: 56px; border-radius: 14px; object-fit: cover; flex-shrink: 0; border: 1px solid rgba(0,0,0,0.06); display: block; }
+  .apk-info { flex: 1; min-width: 0; }
+  .apk-name { font-size: 15px; font-weight: 700; color: #0a1628; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .badge { display: inline-flex; align-items: center; gap: 4px; background: #eff6ff; color: #1d4ed8; border-radius: 50px; font-size: 11px; font-weight: 600; padding: 3px 10px; }
+  .badge.app { background: #fff3e0; color: #e67700; }
+
+  /* ── VERSION SELECT ── */
+  .version-select {
+    width: 100%; padding: 9px 36px 9px 14px; border-radius: 50px;
+    border: 1.5px solid #dbeafe; font-size: 13px; color: #1e40af;
+    background: #eff6ff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%231d4ed8' stroke-width='2.5'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center;
+    appearance: none; cursor: pointer; outline: none; transition: border-color 0.15s;
+  }
+  .version-select:focus { border-color: #3b82f6; }
+
+  .version-info { display: flex; align-items: center; gap: 14px; font-size: 12px; margin: 8px 0 12px; }
+  .size-badge { background: #dbeafe; color: #1d4ed8; border-radius: 50px; padding: 3px 10px; font-weight: 600; font-size: 11px; }
+  .safe { color: #22c55e !important; font-weight: 600; font-size: 12px; }
+
+  /* ── DOWNLOAD BTN ── */
+  .download-btn {
+    width: 100%; padding: 12px; border-radius: 50px;
+    background: linear-gradient(90deg, #1d4ed8, #0ea5e9);
+    color: white; border: none; font-size: 14px; font-weight: 700;
+    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: box-shadow 0.2s, transform 0.1s, opacity 0.15s;
+    text-decoration: none;
+    box-shadow: 0 4px 18px rgba(14,165,233,0.35);
+  }
+  .download-btn:hover { box-shadow: 0 6px 24px rgba(14,165,233,0.55); opacity: 0.92; }
+  .download-btn:active { transform: scale(0.98); }
+  .download-btn.success { background: #22c55e; box-shadow: 0 4px 18px rgba(34,197,94,0.4); }
+
+  .no-results { text-align: center; padding: 2rem; color: rgba(255,255,255,0.5); font-size: 14px; }
+
+  /* ── SLIDE UP FADE IN ── */
+  @keyframes slideUp { from { opacity:0; transform:translateY(28px); } to { opacity:1; transform:translateY(0); } }
+  .apk-card { animation: slideUp 0.45s ease both; }
+
+  /* ── FOOTER ── */
+  .footer { text-align: center; padding: 2rem 1rem 1.5rem; color: rgba(255,255,255,0.3); font-size: 12px; }
+  .footer-divider { border: none; border-top: 1px solid rgba(255,255,255,0.08); margin: 0 1rem 1.5rem; }
+
+  /* ── PAGE LOADING SCREEN ── */
+  #pageLoader {
+    position: fixed; inset: 0; z-index: 99999;
+    background: linear-gradient(135deg, #0a1628 0%, #0d2b5e 45%, #1a4db5 100%);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 0;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+  }
+  #pageLoader.hide { opacity: 0; visibility: hidden; }
+
+  .loader-logo {
+    width: 72px; height: 72px; border-radius: 20px;
+    background: linear-gradient(135deg, #38bdf8, #3b82f6);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px; overflow: hidden;
+    box-shadow: 0 0 40px rgba(56,189,248,0.5);
+    margin-bottom: 1.25rem;
+    animation: loaderPop 0.6s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  .loader-logo img { width: 100%; height: 100%; object-fit: cover; border-radius: 20px; display: block; }
+  @keyframes loaderPop {
+    from { transform: scale(0.5); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
+  }
+
+  .loader-brand {
+    font-size: 26px; font-weight: 900; color: white; letter-spacing: -0.5px;
+    text-shadow: 0 0 24px rgba(56,189,248,0.6);
+    margin-bottom: 0.35rem;
+    animation: loaderFadeUp 0.5s 0.2s ease both;
+  }
+  .loader-tagline {
+    font-size: 13px; color: rgba(255,255,255,0.45);
+    margin-bottom: 2.5rem;
+    animation: loaderFadeUp 0.5s 0.3s ease both;
+  }
+  @keyframes loaderFadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .loader-bar-wrap {
+    width: 180px; height: 4px; border-radius: 99px;
+    background: rgba(255,255,255,0.1);
+    overflow: hidden;
+    animation: loaderFadeUp 0.4s 0.4s ease both;
+  }
+  .loader-bar {
+    height: 100%; width: 0%; border-radius: 99px;
+    background: linear-gradient(90deg, #38bdf8, #3b82f6);
+    box-shadow: 0 0 10px rgba(56,189,248,0.6);
+    animation: loaderProgress 3.2s 0.3s cubic-bezier(.4,0,.2,1) forwards;
+  }
+  @keyframes loaderProgress {
+    0%   { width: 0%; }
+    60%  { width: 75%; }
+    90%  { width: 92%; }
+    100% { width: 100%; }
+  }
+
+  .loader-dots {
+    display: flex; gap: 6px; margin-top: 1.5rem;
+    animation: loaderFadeUp 0.4s 0.5s ease both;
+  }
+  .loader-dots span {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: rgba(56,189,248,0.5);
+    animation: dotBounce 1.2s infinite ease-in-out;
+  }
+  .loader-dots span:nth-child(1) { animation-delay: 0s; }
+  .loader-dots span:nth-child(2) { animation-delay: 0.18s; }
+  .loader-dots span:nth-child(3) { animation-delay: 0.36s; }
+  @keyframes dotBounce {
+    0%, 80%, 100% { transform: scale(0.7); opacity: 0.4; }
+    40%            { transform: scale(1);   opacity: 1;   }
+  }
+
+
+  /* ── SCROLL PROGRESS BAR ── */
+  #scrollBar {
+    position: fixed; top: 0; left: 0; z-index: 99998;
+    height: 3px; width: 0%;
+    background: linear-gradient(90deg, #38bdf8, #3b82f6, #818cf8);
+    box-shadow: 0 0 8px rgba(56,189,248,0.7);
+    transition: width 0.08s linear;
+    border-radius: 0 2px 2px 0;
+  }
+
+</style>
+</head>
+<body>
+<div id="scrollBar"></div>
+
+<!-- ── PAGE LOADER ── -->
+<div id="pageLoader">
+  <div class="loader-logo" id="loaderLogo"></div>
+  <div class="loader-brand">Yuki games</div>
+  <div class="loader-tagline">Loading...</div>
+  <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
+  <div class="loader-dots"><span></span><span></span><span></span></div>
+</div>
+<div class="store">
+
+  <div class="header">
+    <div class="brand">
+      <div class="brand-avatar" id="brandAvatar"></div>
+      <span class="brand-name">Yuki games</span>
+    </div>
+    <div class="search-bar">
+      <span></span>
+      <input type="text" placeholder="Search games" id="searchInput" oninput="renderAll()" />
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active">All Games</button>
+  </div>
+
+  <div class="section-title">Download Game</div>
+  <div class="cards" id="cardList"></div>
+
+  <hr class="footer-divider" />
+  <div class="footer">© 2026 Yuki games. All rights reserved.</div>
+
+</div>
+<script>
+// ════════════════════════════════════════════════════════════════
+//  HOW TO ADD A NEW GAME / APP
+//  Copy one entry below and fill in your own values.
+//
+//  FIELDS:
+//   id       → unique number (just keep incrementing: 6, 7, 8 …)
+//   name     → display name
+//   cat      → "game" or "app"
+//   icon     → image URL from catbox.moe  e.g. "https://files.catbox.moe/abc123.png"
+//
+//   versions → array of version objects. Each version has:
+//     label  → version string shown in the dropdown
+//     size   → file size shown when this version is selected
+//     link   → direct APK download URL for this specific version
+//              (use "" if no link yet — button will be greyed out)
+//
+//  ── LOGO ICON ──
+//  Change LOGO_URL below to any image URL (catbox.moe recommended).
+//  Use "" to show the default gradient circle instead.
+// ════════════════════════════════════════════════════════════════
+
+// ▼▼▼ PASTE YOUR LOGO URL HERE ▼▼▼
+const LOGO_URL = "https://files.catbox.moe/bcrxqe.jpg";
+// ▲▲▲ e.g. "https://files.catbox.moe/abc123.png" ▲▲▲
+const APPS = [
+    ,{
+  id: 3,
+  name: "Alone with my teacher",
+  cat: "game",
+  icon: "https://files.catbox.moe/4oilfx.png",
+  dlKey: "Alone",
+  versions: [
+    { label: "v0.12.2 (Latest)", size: "709 MB", link: "https://pixeldrain.net/u/wfP3CuuD" },
+  ]
+}
+  ,{
+  id: 2,
+  name: "Kingdom of Passion",
+  cat: "game",
+  icon: "https://files.catbox.moe/0ig919.png",
+  dlKey: "kingdom",
+  versions: [
+    { label: "v0.10.2a (Latest)", size: "827 MB", link: "https://pixeldrain.net/u/PT4VtfdU" },
+  ]
+}
+  ,{
+  id: 1,
+  name: "Joiplay",
+  cat: "app",
+  icon: "https://files.catbox.moe/7rbboa.png",
+  dlKey: "joiplay",
+  versions: [
+    { label: "1.21.000 (Latest)", size: "26.4 MB", link: "https://mega.nz/file/br4nwQ4b#rAPGU8CikRV9_aSeO88lmIzfpKRPcSWBdZP-Dka_xCQ" },
+  ]
+}
+
+  // ── ADD NEW ENTRIES ABOVE THIS LINE ──
+  // ,{
+  //   id: 6,
+  //   name: "Free Fire MAX Mod",
+  //   cat: "game",
+  //   icon: "https://files.catbox.moe/YOURFILE.png",
+  //   versions: [
+  //     { label: "OB47 (Latest)", size: "900 MB", link: "https://your-link.com/ff_ob47.apk" },
+  //     { label: "OB46",          size: "870 MB", link: "" }
+  //   ]
+  // }
+];
+
+
+// ── PAGE LOADER ──────────────────────────────────────────
+(function() {
+  // Mirror logo into loader
+  var ll = document.getElementById('loaderLogo');
+  if (LOGO_URL && LOGO_URL.trim() !== '') {
+    var img = document.createElement('img');
+    img.src = LOGO_URL;
+    img.alt = 'Logo';
+    ll.appendChild(img);
+  } else {
+    ll.textContent = '🎮';
+  }
+
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      document.getElementById('pageLoader').classList.add('hide');
+    }, 3500);
+  });
+})();
+
+// ── LOGO INIT ────────────────────────────────────────────
+(function() {
+  const avatar = document.getElementById('brandAvatar');
+  if (LOGO_URL && LOGO_URL.trim() !== '') {
+    const img = document.createElement('img');
+    img.src = LOGO_URL;
+    img.alt = 'Logo';
+    avatar.appendChild(img);
+  } else {
+    avatar.textContent = '🎮';
+  }
+})();
+
+// ── RENDER ───────────────────────────────────────────────
+function renderCard(c) {
+  const badgeCls = c.cat === 'app' ? 'badge app' : 'badge';
+  const badgeLbl = c.cat === 'app' ? 'App' : 'Game';
+  const first    = c.versions[0];
+
+  const opts = c.versions.map((v, i) =>
+    `<option value="${i}">${v.label} — ${v.size}</option>`
+  ).join('');
+
+  const hasLink  = first.link && first.link.trim() !== '';
+  const btnStyle = hasLink ? '' : 'opacity:0.45;pointer-events:none;cursor:not-allowed;';
+  const btnLabel = hasLink ? 'Download' : '⬇ No link yet';
+
+  return `
+  <div class="apk-card" data-cat="${c.cat}" id="card-${c.id}">
+    <div class="apk-top">
+      <img class="apk-icon" src="${c.icon}" alt="${c.name}"
+           onerror="this.src='https://placehold.co/56x56/eef2ff/3b5bdb?text=?'" />
+      <div class="apk-info">
+        <div class="apk-name">${c.name}</div>
+        <span class="${badgeCls}">${badgeLbl}</span>
+      </div>
+    </div>
+    <select class="version-select" id="sel-${c.id}" onchange="onVersionChange(${c.id})">
+      ${opts}
+    </select>
+    <div class="version-info" id="vinfo-${c.id}">
+      <span class="size-badge" id="vsize-${c.id}"> ${first.size}</span>
+      <span class="safe">✔ Safe</span>
+    </div>
+    <a class="download-btn" id="dlbtn-${c.id}"
+       href="${hasLink ? first.link : '#'}"
+       target="_blank" rel="noopener"
+       style="${btnStyle}"
+       onclick="handleDownload(event, ${c.id})">
+      ${btnLabel}
+    </a>
+  </div>`;
+}
+
+function renderAll() {
+  const q    = document.getElementById('searchInput').value.toLowerCase();
+  const list = document.getElementById('cardList');
+  const filtered = APPS.filter(c => c.name.toLowerCase().includes(q));
+  list.innerHTML = filtered.length
+    ? filtered.map(renderCard).join('')
+    : '<div class="no-results">No results found.</div>';
+}
+
+// ── VERSION CHANGE ───────────────────────────────────────
+function onVersionChange(id) {
+  const app = APPS.find(c => c.id === id);
+  const idx = parseInt(document.getElementById('sel-' + id).value);
+  const ver = app.versions[idx];
+
+  // Update size
+  document.getElementById('vsize-' + id).textContent = '📦 ' + ver.size;
+
+  // Update download button
+  const btn      = document.getElementById('dlbtn-' + id);
+  const hasLink  = ver.link && ver.link.trim() !== '';
+  btn.href       = hasLink ? ver.link : '#';
+  btn.textContent= hasLink ? '⬇ Download APK' : '⬇ No link yet';
+  btn.style.opacity          = hasLink ? '1' : '0.45';
+  btn.style.pointerEvents    = hasLink ? 'auto' : 'none';
+  btn.style.cursor           = hasLink ? 'pointer' : 'not-allowed';
+}
+
+// ── DOWNLOAD HANDLER ─────────────────────────────────────
+function handleDownload(e, id) {
+  const btn = document.getElementById('dlbtn-' + id);
+  if (!btn.href || btn.href.endsWith('#')) { e.preventDefault(); return; }
+  btn.textContent = '✔ Downloading...';
+  btn.classList.add('success');
+  setTimeout(() => {
+    btn.innerHTML = '⬇ Download APK';
+    btn.classList.remove('success');
+  }, 2500);
+}
+
+renderAll();
+
+// ── STAGGER CARD ANIMATION ────────────────────────────────
+function applyStagger() {
+  document.querySelectorAll('.apk-card').forEach((card, i) => {
+    card.style.animationDelay = (i * 0.08) + 's';
+  });
+}
+// Patch renderAll to apply stagger after render
+const _origRender = renderAll;
+window.renderAll = function() {
+  _origRender();
+  applyStagger();
+};
+applyStagger();
+
+// ── COPY PROTECTION ──────────────────────────────────────
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('selectstart', e => e.preventDefault());
+document.addEventListener('copy', e => e.preventDefault());
+document.addEventListener('keydown', e => {
+  // Block Ctrl+C, Ctrl+A, Ctrl+U, Ctrl+S, F12
+  if (e.ctrlKey && ['c','a','u','s'].includes(e.key.toLowerCase())) e.preventDefault();
+  if (e.key === 'F12') e.preventDefault();
+});
+
+
+// ── SCROLL PROGRESS BAR ──────────────────────────────────
+window.addEventListener('scroll', function() {
+  var scrollTop = window.scrollY || document.documentElement.scrollTop;
+  var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  var pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+  document.getElementById('scrollBar').style.width = pct + '%';
+});
+
+</script>
+</body>
+</html>
